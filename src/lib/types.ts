@@ -27,8 +27,9 @@ export type StoreConfig = {
   attendantName: string;
   attendantTone: string;
   attendantImage: string;
-  /** Quadros extras para animar a boca enquanto fala */
-  attendantTalkFrames?: string[];
+  /** photo = retrato estático; human3d = avatar 3D com lip-sync */
+  avatarMode: "photo" | "human3d";
+  avatar3dUrl?: string;
   voiceLang: string;
   voiceGender: "female" | "male";
   primaryColor: string;

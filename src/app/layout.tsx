@@ -27,6 +27,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${display.variable} ${body.variable} h-full antialiased`}>
+      <head>
+        <script
+          type="importmap"
+          // TalkingHead (avatar 3D) carrega three via import map, fora do bundler.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              imports: {
+                three: "/vendor/three/build/three.module.js",
+                "three/addons/": "/vendor/three/examples/jsm/",
+              },
+            }),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

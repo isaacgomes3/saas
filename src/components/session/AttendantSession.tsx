@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition, type CSSProperties } from "react";
 import { AvatarStage } from "@/components/session/AvatarStage";
 import { CheckoutPanel } from "@/components/session/CheckoutPanel";
+import { HumanAvatar, type HumanAvatarHandle } from "@/components/session/HumanAvatar";
 import { ProductShelf } from "@/components/session/ProductShelf";
 import { Transcript } from "@/components/session/Transcript";
 import { buildGreeting } from "@/lib/conversation";
@@ -29,9 +30,10 @@ function uid() {
 export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
   const sector =
     store.sectors.find((item) => item.id === sectorId) ??
-    store.sectors.find((item) => item.id === "geral") ??
+    store.sectors.find((item) => item.id === "geral" || item.id === "recepcao") ??
     store.sectors[0];
 
+  const useHumanAvatar = store.avatarMode === "human3d";
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [mood, setMood] = useState<AvatarMood>("idle");
   const [mediaReady, setMediaReady] = useState(false);
@@ -44,18 +46,36 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
   const [pending, startTransition] = useTransition();
   const videoRef = useRef<HTMLVideoElement>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
-  const bootRef = useRef(false);
+  const avatarRef = useRef<HumanAvatarHandle>(null);
+  const greetingStarted = useRef(false);
 
-  useEffect(() => {
-    if (bootRef.current) return;
-    bootRef.current = true;
+  async function speakAttendant(text: string) {
+    if (useHumanAvatar && avatarRef.current) {
+      await avatarRef.current.speak(text);
+      return;
+    }
+    await speakText(text, store.voiceLang, store.voiceGender);
+  }
+
+  function stopAttendant() {
+    if (useHumanAvatar) avatarRef.current?.stop();
+    else stopSpeaking();
+  }
+
+  function startGreeting() {
+    if (greetingStarted.current) return;
+    greetingStarted.current = true;
     const greeting = buildGreeting(store, sector.id);
     setMessages([greeting]);
     setMood("speaking");
-    void speakText(greeting.text, store.voiceLang, store.voiceGender).finally(() =>
-      setMood("idle"),
-    );
-  }, [store, sector.id]);
+    void speakAttendant(greeting.text).finally(() => setMood("idle"));
+  }
+
+  useEffect(() => {
+    if (!useHumanAvatar) startGreeting();
+    // human3d espera onReady do avatar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [store.slug, sector.id, useHumanAvatar]);
 
   async function enableMedia() {
     setMediaError(null);
@@ -86,7 +106,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
     const cleaned = text.trim();
     if (!cleaned || pending) return;
 
-    stopSpeaking();
+    stopAttendant();
     const customerMessage: ChatMessage = {
       id: uid(),
       role: "customer",
@@ -150,7 +170,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
         }
 
         setMood("speaking");
-        await speakText(data.reply, store.voiceLang, store.voiceGender);
+        await speakAttendant(data.reply);
         setMood("idle");
       } catch {
         setMood("idle");
@@ -212,7 +232,11 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
   }
 
   function onSelectProduct(product: Product) {
-    void sendMessage(`Quero saber mais sobre o ${product.name} e ver se posso comprar.`);
+    void sendMessage(
+      isDentalClinic(store)
+        ? `Quero saber mais sobre ${product.name}.`
+        : `Quero saber mais sobre o ${product.name} e ver se posso comprar.`,
+    );
   }
 
   const dental = isDentalClinic(store);
@@ -237,14 +261,31 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
 
       <div className="session-grid">
         <section className="session-stage">
-          <AvatarStage
-            name={store.attendantName}
-            mood={mood}
-            storeName={store.name}
-            imageSrc={store.attendantImage}
-            sectorLabel={sector.label}
-            roleLabel={store.experienceLabel}
-          />
+          {useHumanAvatar ? (
+            <HumanAvatar
+              ref={avatarRef}
+              name={store.attendantName}
+              mood={mood}
+              storeName={store.name}
+              sectorLabel={sector.label}
+              roleLabel={store.experienceLabel}
+              voiceLang={store.voiceLang}
+              voiceGender={store.voiceGender}
+              avatarUrl={store.avatar3dUrl}
+              onReadyChange={(ready) => {
+                if (ready) startGreeting();
+              }}
+            />
+          ) : (
+            <AvatarStage
+              name={store.attendantName}
+              mood={mood}
+              storeName={store.name}
+              imageSrc={store.attendantImage}
+              sectorLabel={sector.label}
+              roleLabel={store.experienceLabel}
+            />
+          )}
 
           <div className="customer-camera">
             <video ref={videoRef} muted playsInline autoPlay />

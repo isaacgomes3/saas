@@ -156,6 +156,7 @@ export const demoStore: StoreConfig = {
   attendantName: "Lia",
   attendantTone: "consultiva, calorosa e objetiva",
   attendantImage: "/avatars/lia-casa-viva.png",
+  avatarMode: "photo",
   voiceLang: "pt-BR",
   voiceGender: "female",
   primaryColor: "#0d5c4d",
@@ -204,6 +205,8 @@ export const odontoFaceStore: StoreConfig = {
   attendantTone:
     "humanizado, acolhedor, claro e sem pressão — explica com calma e valida o sentimento do paciente",
   attendantImage: "/avatars/sofia-odonto-face.png",
+  avatarMode: "human3d",
+  avatar3dUrl: "/avatars3d/sofia.glb",
   voiceLang: "pt-BR",
   voiceGender: "female",
   primaryColor: "#0e7490",

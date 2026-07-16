@@ -408,37 +408,13 @@ input {
   background: #10231f;
 }
 
-.avatar-human-stack {
-  position: absolute;
-  inset: 0;
-  will-change: transform;
-}
-
 .avatar-human-photo {
   object-fit: cover;
   object-position: center 16%;
-  transform-origin: center 30%;
 }
 
 .avatar-human-photo.is-visible {
   opacity: 1;
-}
-
-.avatar-frame-human[data-mood="idle"] .avatar-human-stack {
-  animation: avatarIdle 4.5s ease-in-out infinite;
-}
-
-.avatar-frame-human[data-mood="listening"] .avatar-human-stack {
-  animation: avatarListen 1.8s ease-in-out infinite;
-}
-
-.avatar-frame-human[data-mood="thinking"] .avatar-human-stack {
-  animation: avatarThink 2.2s ease-in-out infinite;
-  filter: saturate(0.95);
-}
-
-.avatar-frame-human[data-mood="speaking"] .avatar-human-stack {
-  animation: avatarSpeak 0.55s ease-in-out infinite;
 }
 
 .avatar-human-veil {
@@ -448,116 +424,32 @@ input {
   pointer-events: none;
 }
 
-.avatar-speak-glow {
-  position: absolute;
-  left: 50%;
-  bottom: 14%;
-  width: 48%;
-  height: 16%;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(14, 116, 144, 0.45), transparent 70%);
-  filter: blur(10px);
-  animation: pulse 0.7s ease-in-out infinite;
-  pointer-events: none;
+.avatar-frame-3d {
+  background: linear-gradient(180deg, #dceef2 0%, #b7d4dc 100%);
 }
 
-.avatar-voice-meter {
+.avatar-3d-mount {
   position: absolute;
-  right: 0.85rem;
-  bottom: 3.2rem;
-  display: flex;
-  align-items: flex-end;
-  gap: 0.2rem;
-  height: 1.4rem;
-  padding: 0.35rem 0.45rem;
-  border-radius: 0.7rem;
-  background: rgba(255, 255, 255, 0.9);
+  inset: 0;
+}
+
+.avatar-3d-mount canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.avatar-3d-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(236, 248, 250, 0.82);
+  color: var(--ink-soft);
+  font-size: 0.95rem;
   z-index: 2;
-}
-
-.avatar-voice-meter span {
-  width: 0.22rem;
-  border-radius: 999px;
-  background: var(--store-brand, var(--brand));
-  transform-origin: bottom center;
-  animation: voiceBar 0.5s ease-in-out infinite;
-}
-
-.avatar-voice-meter span:nth-child(1) {
-  height: 35%;
-  animation-delay: 0s;
-}
-.avatar-voice-meter span:nth-child(2) {
-  height: 70%;
-  animation-delay: 0.08s;
-}
-.avatar-voice-meter span:nth-child(3) {
-  height: 100%;
-  animation-delay: 0.16s;
-}
-.avatar-voice-meter span:nth-child(4) {
-  height: 55%;
-  animation-delay: 0.24s;
-}
-.avatar-voice-meter span:nth-child(5) {
-  height: 40%;
-  animation-delay: 0.32s;
-}
-
-@keyframes avatarIdle {
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
-  }
-  50% {
-    transform: scale(1.01) translateY(-2px);
-  }
-}
-
-@keyframes avatarListen {
-  0%,
-  100% {
-    transform: scale(1.015) translateY(0);
-  }
-  50% {
-    transform: scale(1.03) translateY(-2px);
-  }
-}
-
-@keyframes avatarThink {
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
-  }
-  50% {
-    transform: scale(1.01) translateY(-1px);
-  }
-}
-
-@keyframes avatarSpeak {
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
-  }
-  30% {
-    transform: scale(1.018) translateY(-2px);
-  }
-  60% {
-    transform: scale(1.01) translateY(1px);
-  }
-}
-
-@keyframes voiceBar {
-  0%,
-  100% {
-    transform: scaleY(0.45);
-    opacity: 0.7;
-  }
-  50% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
+  text-align: center;
+  padding: 1rem;
 }
 
 .avatar-glow {
