@@ -27,6 +27,8 @@ export type StoreConfig = {
   attendantName: string;
   attendantTone: string;
   attendantImage: string;
+  /** Quadros extras para animar a boca enquanto fala */
+  attendantTalkFrames?: string[];
   voiceLang: string;
   voiceGender: "female" | "male";
   primaryColor: string;

@@ -408,15 +408,38 @@ input {
   background: #10231f;
 }
 
+.avatar-human-stack {
+  position: absolute;
+  inset: 0;
+}
+
 .avatar-human-photo {
   object-fit: cover;
   object-position: center 18%;
-  transform-origin: center 30%;
-  transition: transform 400ms ease;
+  transform-origin: center 28%;
+  opacity: 0;
+  transition: opacity 70ms linear, transform 280ms ease, filter 280ms ease;
 }
 
-.avatar-frame-human[data-mood="speaking"] .avatar-human-photo {
-  animation: avatarTalk 1.1s ease-in-out infinite;
+.avatar-human-photo.is-visible {
+  opacity: 1;
+}
+
+.avatar-jaw-layer {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(58% 18% 18% 18%);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.avatar-frame-human[data-mood="speaking"] .avatar-human-stack {
+  animation: avatarHeadBob 1.4s ease-in-out infinite;
+}
+
+.avatar-frame-human[data-mood="speaking"] .avatar-jaw-layer {
+  opacity: 0.95;
+  animation: avatarJaw 0.22s ease-in-out infinite;
 }
 
 .avatar-frame-human[data-mood="listening"] .avatar-human-photo {
@@ -424,7 +447,11 @@ input {
 }
 
 .avatar-frame-human[data-mood="thinking"] .avatar-human-photo {
-  filter: saturate(0.92);
+  filter: saturate(0.92) brightness(0.98);
+}
+
+.avatar-frame-human.is-blinking .avatar-human-photo {
+  filter: brightness(0.97);
 }
 
 .avatar-human-veil {
@@ -434,26 +461,76 @@ input {
   pointer-events: none;
 }
 
-.avatar-speak-ring {
+.avatar-voice-meter {
   position: absolute;
-  left: 50%;
-  bottom: 18%;
-  width: 42%;
-  height: 8%;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(232, 168, 56, 0.35), transparent 70%);
-  filter: blur(8px);
-  animation: pulse 0.9s ease-in-out infinite;
+  right: 0.85rem;
+  bottom: 3.2rem;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.2rem;
+  height: 1.4rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.88);
 }
 
-@keyframes avatarTalk {
+.avatar-voice-meter span {
+  width: 0.22rem;
+  border-radius: 999px;
+  background: var(--store-brand, var(--brand));
+  animation: voiceBar 0.55s ease-in-out infinite;
+}
+
+.avatar-voice-meter span:nth-child(1) {
+  height: 35%;
+  animation-delay: 0s;
+}
+.avatar-voice-meter span:nth-child(2) {
+  height: 70%;
+  animation-delay: 0.08s;
+}
+.avatar-voice-meter span:nth-child(3) {
+  height: 100%;
+  animation-delay: 0.16s;
+}
+.avatar-voice-meter span:nth-child(4) {
+  height: 55%;
+  animation-delay: 0.24s;
+}
+.avatar-voice-meter span:nth-child(5) {
+  height: 40%;
+  animation-delay: 0.32s;
+}
+
+@keyframes avatarHeadBob {
   0%,
   100% {
-    transform: scale(1);
+    transform: translateY(0) scale(1);
   }
   50% {
-    transform: scale(1.015) translateY(-1px);
+    transform: translateY(-3px) scale(1.012);
+  }
+}
+
+@keyframes avatarJaw {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(3px) scaleY(1.04);
+  }
+}
+
+@keyframes voiceBar {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }
 

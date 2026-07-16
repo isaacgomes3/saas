@@ -204,6 +204,12 @@ export const odontoFaceStore: StoreConfig = {
   attendantTone:
     "humanizado, acolhedor, claro e sem pressão — explica com calma e valida o sentimento do paciente",
   attendantImage: "/avatars/sofia-odonto-face.png",
+  attendantTalkFrames: [
+    "/avatars/sofia-odonto-face.png",
+    "/avatars/sofia-fala-1.png",
+    "/avatars/sofia-fala-2.png",
+    "/avatars/sofia-fala-1.png",
+  ],
   voiceLang: "pt-BR",
   voiceGender: "female",
   primaryColor: "#0e7490",
