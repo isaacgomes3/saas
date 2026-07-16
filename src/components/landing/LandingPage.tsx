@@ -37,7 +37,7 @@ export function LandingPage() {
         </Link>
         <nav>
           <a href="#como-funciona">Como funciona</a>
-          <a href="#plataforma">Plataforma</a>
+          <Link href="/apresentacao">Apresentação</Link>
           <Link href="/dashboard">Painel</Link>
           <Link href="/a/casa-viva/sofas" className="btn-nav">
             Ver demonstração

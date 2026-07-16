@@ -26,6 +26,7 @@ Abra [http://localhost:3000](http://localhost:3000).
 | Rota | Função |
 | --- | --- |
 | `/` | Landing da plataforma Presença |
+| `/apresentacao` | Apresentação visual de vendas (totem, robô, celular) |
 | `/a/casa-viva/sofas` | Atendimento do cliente (demo Casa Viva · setor sofás) |
 | `/dashboard` | Painel do lojista (avatar, QR, catálogo) |
 | `/pagamento/[id]` | Checkout / link de pagamento (demo) |
