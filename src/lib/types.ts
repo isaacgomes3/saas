@@ -28,6 +28,7 @@ export type StoreConfig = {
   attendantTone: string;
   attendantImage: string;
   voiceLang: string;
+  voiceGender: "female" | "male";
   primaryColor: string;
   accentColor: string;
   sectors: StoreSector[];

@@ -52,7 +52,9 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
     const greeting = buildGreeting(store, sector.id);
     setMessages([greeting]);
     setMood("speaking");
-    void speakText(greeting.text, store.voiceLang).finally(() => setMood("idle"));
+    void speakText(greeting.text, store.voiceLang, store.voiceGender).finally(() =>
+      setMood("idle"),
+    );
   }, [store, sector.id]);
 
   async function enableMedia() {
@@ -148,7 +150,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
         }
 
         setMood("speaking");
-        await speakText(data.reply, store.voiceLang);
+        await speakText(data.reply, store.voiceLang, store.voiceGender);
         setMood("idle");
       } catch {
         setMood("idle");
