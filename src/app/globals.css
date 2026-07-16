@@ -411,53 +411,54 @@ input {
 .avatar-human-stack {
   position: absolute;
   inset: 0;
+  will-change: transform;
 }
 
 .avatar-human-photo {
   object-fit: cover;
-  object-position: center 18%;
-  transform-origin: center 28%;
-  opacity: 0;
-  transition: opacity 70ms linear, transform 280ms ease, filter 280ms ease;
+  object-position: center 16%;
+  transform-origin: center 30%;
 }
 
 .avatar-human-photo.is-visible {
   opacity: 1;
 }
 
-.avatar-jaw-layer {
-  position: absolute;
-  inset: 0;
-  clip-path: inset(58% 18% 18% 18%);
-  pointer-events: none;
-  opacity: 0;
+.avatar-frame-human[data-mood="idle"] .avatar-human-stack {
+  animation: avatarIdle 4.5s ease-in-out infinite;
+}
+
+.avatar-frame-human[data-mood="listening"] .avatar-human-stack {
+  animation: avatarListen 1.8s ease-in-out infinite;
+}
+
+.avatar-frame-human[data-mood="thinking"] .avatar-human-stack {
+  animation: avatarThink 2.2s ease-in-out infinite;
+  filter: saturate(0.95);
 }
 
 .avatar-frame-human[data-mood="speaking"] .avatar-human-stack {
-  animation: avatarHeadBob 1.4s ease-in-out infinite;
-}
-
-.avatar-frame-human[data-mood="speaking"] .avatar-jaw-layer {
-  opacity: 0.95;
-  animation: avatarJaw 0.22s ease-in-out infinite;
-}
-
-.avatar-frame-human[data-mood="listening"] .avatar-human-photo {
-  transform: scale(1.02);
-}
-
-.avatar-frame-human[data-mood="thinking"] .avatar-human-photo {
-  filter: saturate(0.92) brightness(0.98);
-}
-
-.avatar-frame-human.is-blinking .avatar-human-photo {
-  filter: brightness(0.97);
+  animation: avatarSpeak 0.55s ease-in-out infinite;
 }
 
 .avatar-human-veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(8, 24, 28, 0.55) 100%);
+  background: linear-gradient(180deg, transparent 58%, rgba(8, 24, 28, 0.5) 100%);
+  pointer-events: none;
+}
+
+.avatar-speak-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  width: 48%;
+  height: 16%;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(14, 116, 144, 0.45), transparent 70%);
+  filter: blur(10px);
+  animation: pulse 0.7s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -471,14 +472,16 @@ input {
   height: 1.4rem;
   padding: 0.35rem 0.45rem;
   border-radius: 0.7rem;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 2;
 }
 
 .avatar-voice-meter span {
   width: 0.22rem;
   border-radius: 999px;
   background: var(--store-brand, var(--brand));
-  animation: voiceBar 0.55s ease-in-out infinite;
+  transform-origin: bottom center;
+  animation: voiceBar 0.5s ease-in-out infinite;
 }
 
 .avatar-voice-meter span:nth-child(1) {
@@ -502,23 +505,46 @@ input {
   animation-delay: 0.32s;
 }
 
-@keyframes avatarHeadBob {
+@keyframes avatarIdle {
   0%,
   100% {
-    transform: translateY(0) scale(1);
+    transform: scale(1) translateY(0);
   }
   50% {
-    transform: translateY(-3px) scale(1.012);
+    transform: scale(1.01) translateY(-2px);
   }
 }
 
-@keyframes avatarJaw {
+@keyframes avatarListen {
   0%,
   100% {
-    transform: translateY(0) scaleY(1);
+    transform: scale(1.015) translateY(0);
   }
   50% {
-    transform: translateY(3px) scaleY(1.04);
+    transform: scale(1.03) translateY(-2px);
+  }
+}
+
+@keyframes avatarThink {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.01) translateY(-1px);
+  }
+}
+
+@keyframes avatarSpeak {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+  }
+  30% {
+    transform: scale(1.018) translateY(-2px);
+  }
+  60% {
+    transform: scale(1.01) translateY(1px);
   }
 }
 
