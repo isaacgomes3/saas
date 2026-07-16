@@ -54,7 +54,12 @@ export function generateAttendantReply(params: {
 }): ConversationResult {
   const { store, message, history } = params;
   const text = normalize(message);
-  const customerTurns = history.filter((item) => item.role === "customer").length;
+  // Histórico pode incluir a mensagem atual; contamos só os turnos anteriores.
+  const previousCustomerTurns = Math.max(
+    0,
+    history.filter((item) => item.role === "customer").length -
+      (history.at(-1)?.role === "customer" && history.at(-1)?.text === message ? 1 : 0),
+  );
 
   const wantsBuy =
     /(comprar|fechar|pagamento|pagar|pix|cartao|orçamento|orcamento|pedido)/.test(text);
@@ -105,7 +110,7 @@ export function generateAttendantReply(params: {
     };
   }
 
-  if (mentionsSize || (smallApartment && customerTurns >= 1)) {
+  if (mentionsSize || (smallApartment && previousCustomerTurns >= 1)) {
     const picks = findProductsForSmallSpace(store.products).slice(0, 3);
     const top = picks[0];
 
