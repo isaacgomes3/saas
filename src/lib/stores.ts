@@ -155,6 +155,7 @@ export const demoStore: StoreConfig = {
   city: "São Paulo",
   attendantName: "Lia",
   attendantTone: "consultiva, calorosa e objetiva",
+  attendantImage: "/avatars/lia-casa-viva.png",
   voiceLang: "pt-BR",
   primaryColor: "#0d5c4d",
   accentColor: "#e8a838",
@@ -201,6 +202,7 @@ export const odontoFaceStore: StoreConfig = {
   attendantName: "Sofia",
   attendantTone:
     "humanizado, acolhedor, claro e sem pressão — explica com calma e valida o sentimento do paciente",
+  attendantImage: "/avatars/sofia-odonto-face.png",
   voiceLang: "pt-BR",
   primaryColor: "#0e7490",
   accentColor: "#f59e0b",

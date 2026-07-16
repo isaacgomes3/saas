@@ -81,6 +81,10 @@ export function DashboardView() {
         <section className="dashboard-grid">
           <article className="dash-panel">
             <h2>Atendente</h2>
+            <div className="attendant-preview">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={store.attendantImage} alt={store.attendantName} />
+            </div>
             <dl className="meta-list">
               <div>
                 <dt>Nome</dt>

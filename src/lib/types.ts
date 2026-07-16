@@ -26,6 +26,7 @@ export type StoreConfig = {
   city: string;
   attendantName: string;
   attendantTone: string;
+  attendantImage: string;
   voiceLang: string;
   primaryColor: string;
   accentColor: string;

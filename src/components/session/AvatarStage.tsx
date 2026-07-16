@@ -1,11 +1,14 @@
 "use client";
 
+import Image from "next/image";
+
 type AvatarMood = "idle" | "listening" | "speaking" | "thinking";
 
 type AvatarStageProps = {
   name: string;
   mood: AvatarMood;
   storeName: string;
+  imageSrc: string;
   sectorLabel?: string;
   roleLabel?: string;
 };
@@ -14,24 +17,23 @@ export function AvatarStage({
   name,
   mood,
   storeName,
+  imageSrc,
   sectorLabel,
   roleLabel = "Atendente virtual",
 }: AvatarStageProps) {
   return (
     <div className="avatar-stage">
-      <div className="avatar-frame" data-mood={mood}>
-        <div className="avatar-glow" aria-hidden />
-        <div className="avatar-face" aria-hidden>
-          <div className="avatar-hair" />
-          <div className="avatar-skin">
-            <div className="avatar-eyes">
-              <span />
-              <span />
-            </div>
-            <div className={`avatar-mouth mood-${mood}`} />
-          </div>
-          <div className="avatar-shoulders" />
-        </div>
+      <div className="avatar-frame avatar-frame-human" data-mood={mood}>
+        <Image
+          src={imageSrc}
+          alt={`${name}, ${roleLabel} da ${storeName}`}
+          fill
+          priority
+          sizes="(max-width: 900px) 100vw, 40vw"
+          className="avatar-human-photo"
+        />
+        <div className="avatar-human-veil" aria-hidden />
+        {mood === "speaking" ? <div className="avatar-speak-ring" aria-hidden /> : null}
         <div className="avatar-status">
           <span className="status-dot" data-mood={mood} />
           {mood === "listening" && "Ouvindo você…"}

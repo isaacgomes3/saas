@@ -239,6 +239,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
             name={store.attendantName}
             mood={mood}
             storeName={store.name}
+            imageSrc={store.attendantImage}
             sectorLabel={sector.label}
             roleLabel={store.experienceLabel}
           />
