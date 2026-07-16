@@ -29,7 +29,10 @@ export default async function PaymentPage({ params, searchParams }: PageProps) {
           pedido fica pronto para finalização.
         </p>
         <div className="hero-cta" style={{ marginTop: "1.25rem" }}>
-          <Link href={`/a/${store?.slug ?? "casa-viva"}/sofas`} className="btn-primary">
+          <Link
+            href={`/a/${store?.slug ?? "casa-viva"}/${store?.slug === "odonto-face" ? "recepcao" : "sofas"}`}
+            className="btn-primary"
+          >
             Voltar ao atendimento
           </Link>
           <Link href="/dashboard" className="btn-ghost">

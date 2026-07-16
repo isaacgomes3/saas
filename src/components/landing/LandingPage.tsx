@@ -140,12 +140,16 @@ export function LandingPage() {
         <section className="section demo-section">
           <h2>Veja a conversa acontecer</h2>
           <p className="section-lead">
-            Na demo da Casa Viva Móveis, peça um sofá para apartamento pequeno e siga até o
-            orçamento.
+            Experimente a loja de móveis ou a clínica odontológica com atendimento humanizado.
           </p>
-          <Link href="/a/casa-viva/sofas" className="btn-primary">
-            Abrir demo Casa Viva
-          </Link>
+          <div className="hero-cta">
+            <Link href="/a/casa-viva/sofas" className="btn-primary">
+              Demo Casa Viva
+            </Link>
+            <Link href="/a/odonto-face/recepcao" className="btn-ghost">
+              Demo Odonto Face
+            </Link>
+          </div>
         </section>
       </main>
 

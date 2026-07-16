@@ -7,9 +7,16 @@ type AvatarStageProps = {
   mood: AvatarMood;
   storeName: string;
   sectorLabel?: string;
+  roleLabel?: string;
 };
 
-export function AvatarStage({ name, mood, storeName, sectorLabel }: AvatarStageProps) {
+export function AvatarStage({
+  name,
+  mood,
+  storeName,
+  sectorLabel,
+  roleLabel = "Atendente virtual",
+}: AvatarStageProps) {
   return (
     <div className="avatar-stage">
       <div className="avatar-frame" data-mood={mood}>
@@ -36,7 +43,7 @@ export function AvatarStage({ name, mood, storeName, sectorLabel }: AvatarStageP
       <div className="avatar-meta">
         <p className="avatar-name">{name}</p>
         <p className="avatar-role">
-          Atendente virtual · {storeName}
+          {roleLabel} · {storeName}
           {sectorLabel ? ` · ${sectorLabel}` : ""}
         </p>
       </div>

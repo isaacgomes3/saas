@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, type CSSProperties } from "react";
 import { AvatarStage } from "@/components/session/AvatarStage";
 import { CheckoutPanel } from "@/components/session/CheckoutPanel";
 import { ProductShelf } from "@/components/session/ProductShelf";
@@ -12,6 +12,7 @@ import {
   stopSpeaking,
   type SpeechRecognitionLike,
 } from "@/lib/speech";
+import { isDentalClinic } from "@/lib/stores";
 import type { ChatMessage, Product, Quote, StoreConfig } from "@/lib/types";
 
 type AttendantSessionProps = {
@@ -212,8 +213,18 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
     void sendMessage(`Quero saber mais sobre o ${product.name} e ver se posso comprar.`);
   }
 
+  const dental = isDentalClinic(store);
+
   return (
-    <div className="session-shell">
+    <div
+      className={`session-shell ${dental ? "session-dental" : ""}`}
+      style={
+        {
+          "--store-brand": store.primaryColor,
+          "--store-accent": store.accentColor,
+        } as CSSProperties
+      }
+    >
       <header className="session-top">
         <div>
           <p className="brand-mark">Presença</p>
@@ -229,6 +240,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
             mood={mood}
             storeName={store.name}
             sectorLabel={sector.label}
+            roleLabel={store.experienceLabel}
           />
 
           <div className="customer-camera">
@@ -270,7 +282,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
             <input
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
-              placeholder="Fale ou digite: Estou procurando um sofá para apartamento pequeno"
+              placeholder={store.inputPlaceholder}
               aria-label="Mensagem para o atendente"
             />
             <button type="submit" className="btn-primary" disabled={pending || !draft.trim()}>
@@ -279,12 +291,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
           </form>
 
           <div className="quick-prompts">
-            {[
-              "Estou procurando um sofá para apartamento pequeno.",
-              "Cerca de 3 por 4 metros.",
-              "Quero ver fotos e medidas.",
-              "Pode gerar o orçamento agora.",
-            ].map((prompt) => (
+            {store.quickPrompts.map((prompt) => (
               <button key={prompt} type="button" onClick={() => void sendMessage(prompt)}>
                 {prompt}
               </button>
@@ -296,6 +303,7 @@ export function AttendantSession({ store, sectorId }: AttendantSessionProps) {
       <CheckoutPanel
         quote={quote}
         handoff={handoff}
+        dental={dental}
         onClose={() => {
           setQuote(null);
           setHandoff(false);

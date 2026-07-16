@@ -31,6 +31,9 @@ export type StoreConfig = {
   accentColor: string;
   sectors: StoreSector[];
   products: Product[];
+  quickPrompts: string[];
+  inputPlaceholder: string;
+  experienceLabel?: string;
 };
 
 export type ChatRole = "customer" | "attendant" | "system";

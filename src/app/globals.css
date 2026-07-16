@@ -308,6 +308,44 @@ input {
   padding: 1rem clamp(0.85rem, 2vw, 1.5rem) 2rem;
 }
 
+.session-dental {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(14, 116, 144, 0.16), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(245, 158, 11, 0.14), transparent 28%),
+    linear-gradient(180deg, #eef8fa 0%, #f7f5f1 100%);
+}
+
+.session-dental .brand-mark,
+.session-dental .product-price,
+.session-dental .btn-primary {
+  color: inherit;
+}
+
+.session-dental .brand-mark {
+  color: var(--store-brand, #0e7490);
+}
+
+.session-dental .btn-primary {
+  background: var(--store-brand, #0e7490);
+  color: #fff;
+}
+
+.session-dental .btn-primary:hover {
+  background: #0b5f73;
+}
+
+.session-dental .avatar-frame {
+  background: linear-gradient(160deg, #0b4f5c 0%, #1494a8 45%, #f0d7a3 100%);
+}
+
+.session-dental .avatar-shoulders {
+  background: linear-gradient(180deg, #0e7490, #0b5f73);
+}
+
+.session-dental .product-price {
+  color: var(--store-brand, #0e7490);
+}
+
 .session-top {
   display: flex;
   justify-content: space-between;

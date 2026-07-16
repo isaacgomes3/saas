@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { demoStore, formatBRL } from "@/lib/stores";
+import { formatBRL, stores } from "@/lib/stores";
 
 type QrPayload = {
   url: string;
@@ -11,9 +11,15 @@ type QrPayload = {
 };
 
 export function DashboardView() {
-  const [selectedSector, setSelectedSector] = useState(demoStore.sectors[0].id);
+  const [storeSlug, setStoreSlug] = useState(stores[0].slug);
+  const store = stores.find((item) => item.slug === storeSlug) ?? stores[0];
+  const [selectedSector, setSelectedSector] = useState(store.sectors[0].id);
   const [qr, setQr] = useState<QrPayload | null>(null);
   const [loadingQr, setLoadingQr] = useState(false);
+
+  useEffect(() => {
+    setSelectedSector(store.sectors[0].id);
+  }, [store.slug, store.sectors]);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,7 +28,7 @@ export function DashboardView() {
       try {
         const origin = window.location.origin;
         const response = await fetch(
-          `/api/qr?store=${demoStore.slug}&sector=${selectedSector}&origin=${encodeURIComponent(origin)}`,
+          `/api/qr?store=${store.slug}&sector=${selectedSector}&origin=${encodeURIComponent(origin)}`,
         );
         const data = (await response.json()) as QrPayload;
         if (!cancelled) setQr(data);
@@ -34,7 +40,7 @@ export function DashboardView() {
     return () => {
       cancelled = true;
     };
-  }, [selectedSector]);
+  }, [store.slug, selectedSector]);
 
   return (
     <div className="dashboard">
@@ -43,8 +49,8 @@ export function DashboardView() {
           Presença
         </Link>
         <div className="dashboard-nav-right">
-          <span>{demoStore.name}</span>
-          <Link href={`/a/${demoStore.slug}/${selectedSector}`} className="btn-nav">
+          <span>{store.name}</span>
+          <Link href={`/a/${store.slug}/${selectedSector}`} className="btn-nav">
             Abrir atendimento
           </Link>
         </div>
@@ -55,9 +61,21 @@ export function DashboardView() {
           <p className="eyebrow">Painel do lojista</p>
           <h1>Personalize o atendente da sua loja</h1>
           <p>
-            Escolha aparência, voz, tom, produtos e regras de venda. Cada QR Code abre uma sessão
-            pronta para converter.
+            Escolha aparência, voz, tom, catálogo e regras. Cada QR Code abre uma sessão pronta para
+            converter — inclusive clínicas com atendimento humanizado.
           </p>
+          <div className="sector-picker" style={{ marginTop: "1rem" }}>
+            {stores.map((item) => (
+              <button
+                key={item.slug}
+                type="button"
+                className={storeSlug === item.slug ? "is-active" : ""}
+                onClick={() => setStoreSlug(item.slug)}
+              >
+                {item.name}
+              </button>
+            ))}
+          </div>
         </section>
 
         <section className="dashboard-grid">
@@ -66,19 +84,19 @@ export function DashboardView() {
             <dl className="meta-list">
               <div>
                 <dt>Nome</dt>
-                <dd>{demoStore.attendantName}</dd>
+                <dd>{store.attendantName}</dd>
               </div>
               <div>
                 <dt>Tom</dt>
-                <dd>{demoStore.attendantTone}</dd>
+                <dd>{store.attendantTone}</dd>
               </div>
               <div>
                 <dt>Idioma</dt>
-                <dd>{demoStore.voiceLang}</dd>
+                <dd>{store.voiceLang}</dd>
               </div>
               <div>
                 <dt>Segmento</dt>
-                <dd>{demoStore.segment}</dd>
+                <dd>{store.segment}</dd>
               </div>
             </dl>
           </article>
@@ -86,7 +104,7 @@ export function DashboardView() {
           <article className="dash-panel">
             <h2>QR Codes por setor</h2>
             <div className="sector-picker">
-              {demoStore.sectors.map((sector) => (
+              {store.sectors.map((sector) => (
                 <button
                   key={sector.id}
                   type="button"
@@ -113,9 +131,9 @@ export function DashboardView() {
           </article>
 
           <article className="dash-panel dash-wide">
-            <h2>Catálogo conectado</h2>
+            <h2>{store.slug === "odonto-face" ? "Serviços da clínica" : "Catálogo conectado"}</h2>
             <div className="catalog-table">
-              {demoStore.products.map((product) => (
+              {store.products.map((product) => (
                 <div key={product.id} className="catalog-row">
                   <div>
                     <strong>{product.name}</strong>
@@ -125,7 +143,11 @@ export function DashboardView() {
                   </div>
                   <div className="catalog-metrics">
                     <span>{formatBRL(product.price)}</span>
-                    <span>Estoque {product.stock}</span>
+                    <span>
+                      {store.slug === "odonto-face"
+                        ? `Vagas ${product.stock}`
+                        : `Estoque ${product.stock}`}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -135,18 +157,18 @@ export function DashboardView() {
           <article className="dash-panel">
             <h2>Integrações</h2>
             <ul className="integration-list">
-              <li>ERP / estoque</li>
-              <li>CRM da loja</li>
+              <li>ERP / estoque ou agenda</li>
+              <li>CRM da loja/clínica</li>
               <li>Pagamentos Pix e cartão</li>
-              <li>Handoff para vendedor humano</li>
+              <li>Handoff para equipe humana</li>
             </ul>
           </article>
 
           <article className="dash-panel">
             <h2>Modelo SaaS</h2>
             <p>
-              Cada loja é um tenant: avatar, voz, tom, catálogo e regras próprias. Ideal para
-              operação recorrente em redes e franquias.
+              Cada negócio é um tenant: avatar, voz, tom, catálogo e regras próprias. Ideal para
+              redes de lojas e clínicas.
             </p>
           </article>
         </section>
